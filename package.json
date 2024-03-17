@@ -1,0 +1,22 @@
+{
+	"name": "bsmg-tickets",
+	"version": "0.1.0",
+	"description": "A ticketing bot for BSMG",
+	"main": "bot.js",
+	"scripts": {
+		"start": "node bot.js",
+		"make:migration": "knex migrate:make",
+		"migrate": "knex migrate:latest",
+		"initiate": "yarn && yarn migrate && yarn start"
+	},
+	"license": "Apache-2.0",
+	"dependencies": {
+		"@discordjs/rest": "^1.0.0",
+		"discord-api-types": "^0.36.2",
+		"discord-html-transcripts": "^3.2.0",
+		"discord.js": "^14.0.2",
+		"dotenv": "^16.4.5",
+		"knex": "^3.1.0",
+		"pg": "^8.11.3"
+	}
+}
