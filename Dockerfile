@@ -1,5 +1,5 @@
 # Alpine Node Image
-FROM node:21-alpine
+FROM node:20-alpine
 ENV NODE_ENV=production
 
 # Create app directory
