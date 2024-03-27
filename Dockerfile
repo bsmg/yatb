@@ -21,4 +21,4 @@ LABEL org.opencontainers.image.source=${GIT_REPO}
 ENV GIT_VERSION=${GIT_VERSION}
 
 # Start Bot
-CMD ["yarn", "run"]
+CMD ["yarn", "dockerstart"]
