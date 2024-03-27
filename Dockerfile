@@ -13,7 +13,6 @@ COPY . .
 RUN yarn install --immutable && \
   yarn cache clean && \
   yarn cache clean --mirror
-RUN yarn migrate
 
 # Repo Metadata
 ARG GIT_REPO
@@ -22,4 +21,4 @@ LABEL org.opencontainers.image.source=${GIT_REPO}
 ENV GIT_VERSION=${GIT_VERSION}
 
 # Start Bot
-CMD ["yarn", "start"]
+CMD ["yarn", "run"]
