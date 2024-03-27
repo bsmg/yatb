@@ -22,10 +22,11 @@ jobs:
             VERSION=${GITHUB_REF#refs/tags/v}
           fi
 
-          echo ::set-output name=git_repo::${GIT_REPO}
-          echo ::set-output name=docker_user::${DOCKER_USER}
-          echo ::set-output name=docker_image::${DOCKER_IMAGE}
-          echo ::set-output name=version::${VERSION}
+          echo "git_repo=${GIT_REPO}" >> $GITHUB_OUTPUT
+          echo "docker_user=${DOCKER_USER}" >> $GITHUB_OUTPUT
+          echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Registry
@@ -45,5 +46,3 @@ jobs:
           build-args: |
             GIT_VERSION=${{ steps.prepare.outputs.version }}
             GIT_REPO=${{ steps.prepare.outputs.git_repo }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
