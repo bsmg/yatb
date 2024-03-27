@@ -1,0 +1,25 @@
+version: '3.6'
+services:
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    networks:
+      - internal
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - ./db:/var/lib/postgresql/data:rw
+
+  bot:
+    image: ghcr.io/bsmg/yatb
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - internal
+    env_file:
+      - .env
+
+networks:
+  internal:
