@@ -44,6 +44,7 @@ module.exports = {
 							.setPlaceholder(question.question)
 							.setLabel(question.question)
 							.setStyle(TextInputStyle[question.type === true ? "Short" : "Paragraph"])
+							.setMaxLength(1000)
 							.setRequired(true);
 
 						row.addComponents(input);
