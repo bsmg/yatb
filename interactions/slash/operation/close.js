@@ -14,7 +14,7 @@ module.exports = {
 
         let embed = new EmbedBuilder()
             .setDescription(`${interaction.user} wants to close the ticket.`)
-            .setColor("Random")
+            .setColor("#F1C40F")
 
             const ticket = await db("tickets")
             .select("*")

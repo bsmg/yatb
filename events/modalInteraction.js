@@ -74,7 +74,7 @@ module.exports = {
 						value: question.response,
 					}))
 				)
-				.setColor("Random")
+				.setColor("#B57EDC")
 				.setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
 				.setTimestamp();
 

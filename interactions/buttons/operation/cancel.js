@@ -6,7 +6,7 @@ module.exports = {
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setDescription(`Close request cancelled by ${interaction.user}.`)
-            .setColor("Random")
+            .setColor("#B57EDC")
 
         await db("tickets")
             .update({ close_requested_at: null })
