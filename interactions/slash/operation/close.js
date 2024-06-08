@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 
-const closeRequestEmbed = require("closeRequestEmbed");
+const closeRequestEmbed = require("../../../helpers/closeRequestEmbed");
 
 module.exports = {
     data: new SlashCommandBuilder()
