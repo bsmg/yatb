@@ -5,7 +5,7 @@ const discordTranscripts = require("discord-html-transcripts");
 module.exports = {
     id: "confirm_close",
     async execute(interaction) {
-        await interaction.deferReply();
+        await interaction.deferReply({ ephemeral: true });
         const channel = interaction.channel;
         const footer = interaction.message.embeds[0].footer.text;
 
@@ -19,13 +19,13 @@ module.exports = {
             const hasRole = member.roles.cache.some((role) => settings.roles.includes(role.id));
 
             if (!hasRole) {
-                return interaction.followUp({ content: "You don't have permission to close this ticket.", ephemeral: true });
+                return interaction.followUp({ content: "You do not have permission to close this ticket.", ephemeral: true });
             }
         }
 
         else {
             if (interaction.user.id !== footer.split(" | ")[0]) {
-                return interaction.followUp({ content: "You don't have permission to close this ticket.", ephemeral: true });
+                return interaction.followUp({ content: "You do not have permission to close this ticket.", ephemeral: true });
             }
         }
 
@@ -63,7 +63,7 @@ module.exports = {
         logChannel.send({ embeds: [embed] });
         logChannel.send({ files: [transcript] });
 
-        interaction.followUp({ content: `Closing this ticket in 5 seconds...` });
+        interaction.followUp({ content: `Closing this ticket in 5 seconds...`, ephemeral: false });
 
         setTimeout(async () => {
             await channel.delete();
