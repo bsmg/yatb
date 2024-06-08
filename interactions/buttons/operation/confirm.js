@@ -63,6 +63,7 @@ module.exports = {
         logChannel.send({ embeds: [embed] });
         logChannel.send({ files: [transcript] });
 
+        interaction.followUp({ content: `Close Request Confirmed!`})
         interaction.followUp({ content: `Closing this ticket in 5 seconds...`, ephemeral: false });
 
         setTimeout(async () => {
