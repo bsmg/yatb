@@ -1,8 +1,8 @@
-import { closeRequest } from "../../../helpers/closeRequestEmbed";
+const closeRequestEmbed = require("closeRequestEmbed");
 
 module.exports = {
     id: "close_request",
     async execute(interaction) {
-        closeRequest(interaction);
+        closeRequestEmbed(interaction);
     }
 }

@@ -1,7 +1,7 @@
 const { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder } = require("discord.js");
 const db = require("../../../connectDb");
 
-export async function closeRequest(interaction) {
+async function closeRequestEmbed(interaction) {
     const channel = interaction.channel;
 
         if (!channel.name.startsWith("ticket-")) {
@@ -49,4 +49,8 @@ export async function closeRequest(interaction) {
         if (interaction.user.id !== ticket.user_id) {
             await interaction.channel.send({ content: `<@${ticket.user_id}>, Please confirm the closing of this ticket.` })
         }
+}
+
+module.exports = {
+    closeRequestEmbed
 }
