@@ -1,5 +1,5 @@
 const { ButtonBuilder, ButtonStyle, EmbedBuilder, ActionRowBuilder } = require("discord.js");
-const db = require("../../../connectDb");
+const db = require("../connectDb");
 
 async function closeRequestEmbed(interaction) {
     const channel = interaction.channel;
