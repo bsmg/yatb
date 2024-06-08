@@ -1,4 +1,4 @@
-const { ChannelType, EmbedBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder } = require("discord.js");
 const db = require("../connectDb");
 
 module.exports = {
@@ -78,7 +78,16 @@ module.exports = {
 				.setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
 				.setTimestamp();
 
-			channel.send({ embeds: [ticketEmbed] });
+			const row = new ActionRowBuilder()
+				.addComponents(
+					new ButtonBuilder()
+						.setCustomId("close_request")
+						.setLabel("Close Ticket")
+						.setStyle(ButtonStyle.Danger)
+						.setEmoji("✖️")
+				)
+
+			channel.send({ embeds: [ticketEmbed], components: [row] });
 
 			const logEmbed = new EmbedBuilder()
 				.setTitle(`Ticket #${ticketNumber} created`)

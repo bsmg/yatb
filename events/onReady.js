@@ -13,7 +13,9 @@ module.exports = {
 				.where("status", "open")
 				.andWhere("close_requested_at", "!=", null);
 
-			tickets.forEach(async ticket => {
+			const ticketArray = Array.from(tickets);
+
+			ticketArray.forEach(async ticket => {
 				const closeRequestedAt = new Date(ticket.close_requested_at);
 				const timeout = ticket.timeout * 24 * 60 * 60 * 1000;
 
