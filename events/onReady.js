@@ -15,7 +15,7 @@ module.exports = {
 
 			console.log(`Pending Close Check\n===\n${tickets}\n===`)
 
-			tickets.forEach(async ticket => {
+			Object.keys(tickets).forEach(async ticket => {
 				const closeRequestedAt = new Date(ticket.close_requested_at);
 				const timeout = ticket.timeout * 24 * 60 * 60 * 1000;
 
