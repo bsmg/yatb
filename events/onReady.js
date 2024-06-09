@@ -13,11 +13,9 @@ module.exports = {
 				.where("status", "open")
 				.andWhere("close_requested_at", "!=", null);
 
-			const ticketArray = Array.from(tickets);
+			console.log(`Pending Close Check\n===\n${tickets}\n===`)
 
-			console.log(`Pending Close Check\n===\n${tickets}\n===\n${ticketArray}`)
-
-			ticketArray.forEach(async ticket => {
+			tickets.forEach(async ticket => {
 				const closeRequestedAt = new Date(ticket.close_requested_at);
 				const timeout = ticket.timeout * 24 * 60 * 60 * 1000;
 
@@ -61,6 +59,6 @@ module.exports = {
 					}, 5000);
 				}
 			})
-		}, 1000 * 60 * 60);
+		}, 1000 * 60 * 2);
 	},
 };
