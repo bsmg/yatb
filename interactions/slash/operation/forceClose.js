@@ -60,7 +60,7 @@ module.exports = {
         await fetch(`${process.env.API_URL}/transcript`, {
             method: "POST",
             headers: {
-                Authorization: process.env.API_KEY
+                Authorization: process.env.AUTH_KEY
             },
             body: form
         });
