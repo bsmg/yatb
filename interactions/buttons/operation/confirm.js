@@ -1,6 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
 const db = require("../../../connectDb");
 const discordTranscripts = require("discord-html-transcripts");
+const { FormData, File } = require("formdata-node");
+const fs = require("fs");
 
 module.exports = {
     id: "confirm_close",
@@ -32,10 +34,14 @@ module.exports = {
         const transcript = await discordTranscripts.createTranscript(channel, {
             limit: -1,
             filename: `transcript-${channel.name}.html`,
-            saveImages: false,
+            saveImages: true,
             poweredBy: false,
-            ssr: false
+            ssr: false,
+            returnType: "string"
         });
+
+        const transcriptPath = `./temp/${channel.name}.html`;
+        fs.writeFileSync(transcriptPath, transcript);
 
         const ticket = await db("tickets")
             .select("*")
@@ -46,6 +52,25 @@ module.exports = {
             .select("label")
             .where("id", ticket.ticket_id)
             .first();
+
+        const username = (await interaction.guild.members.fetch(ticket.user_id)).user.username;
+
+        const blob = await fs.openAsBlob(transcriptPath);
+
+        const form = new FormData();
+        const file = new File([blob], `transcript-${channel.name}.html`, { type: "text/html" });
+        form.set("file", file);
+        form.set("jsonData", JSON.stringify({ type: category.label, username, ticket: channel.name }));
+
+        await fetch(`${process.env.API_URL}/transcript`, {
+            method: "POST",
+            headers: {
+                Authorization: process.env.API_KEY
+            },
+            body: form
+        });
+
+        fs.unlinkSync(transcriptPath);
 
         const logChannel = interaction.guild.channels.cache.get(ticket.log_channel_id);
 
@@ -58,12 +83,10 @@ module.exports = {
                 { name: "Ticket owner", value: `ID: ${ticket.user_id}` }
             )
             .setColor("Red")
-            .setFooter({ text: `Transcript is attached below this message` })
 
-        logChannel.send({ embeds: [embed] });
-        logChannel.send({ files: [transcript] });
+        logChannel.send({ content: `Transcript available at ${process.env.WEB_URL}/transcript/${channel.name}`, embeds: [embed] });
 
-        interaction.followUp({ content: `Close Request Confirmed!`})
+        interaction.followUp({ content: `Close Request Confirmed!` })
         interaction.followUp({ content: `Closing this ticket in 5 seconds...`, ephemeral: false });
 
         setTimeout(async () => {
