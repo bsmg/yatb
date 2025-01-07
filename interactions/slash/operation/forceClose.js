@@ -29,10 +29,14 @@ module.exports = {
         const transcript = await discordTranscripts.createTranscript(channel, {
             limit: -1,
             filename: `transcript-${channel.name}.html`,
-            saveImages: false,
+            saveImages: true,
             poweredBy: false,
-            ssr: false
+            ssr: false,
+            returnType: "string"
         });
+
+        const transcriptPath = `./temp/${channel.name}.html`;
+        fs.writeFileSync(transcriptPath, transcript);
 
         const ticket = await db("tickets")
             .select("*")
@@ -44,7 +48,24 @@ module.exports = {
             .where("id", ticket.ticket_id)
             .first();
 
-        const logChannel = interaction.guild.channels.cache.get(ticket.log_channel_id);
+        const username = (await interaction.guild.members.fetch(ticket.user_id)).user.username;
+
+        const blob = await fs.openAsBlob(transcriptPath);
+
+        const form = new FormData();
+        const file = new File([blob], `transcript-${channel.name}.html`, { type: "text/html" });
+        form.set("file", file);
+        form.set("jsonData", JSON.stringify({ type: category.label, username, ticket: channel.name }));
+
+        await fetch(`${process.env.API_URL}/transcript`, {
+            method: "POST",
+            headers: {
+                Authorization: process.env.AUTH_KEY
+            },
+            body: form
+        });
+
+        fs.unlinkSync(transcriptPath);
 
         const embed = new EmbedBuilder()
             .setTitle(`Ticket #${ticket.id} closed`)
@@ -54,11 +75,11 @@ module.exports = {
                 { name: "Ticket type", value: `${category.label}` },
                 { name: "Ticket owner", value: `ID: ${ticket.user_id}` }
             )
-            .setColor("Red")
-            .setFooter({ text: `Transcript is attached below this message` })
+            .setColor("Red");
 
-        logChannel.send({ embeds: [embed] });
-        logChannel.send({ files: [transcript] });
+        const logChannel = interaction.guild.channels.cache.get(ticket.log_channel_id);
+
+        logChannel.send({ content: `Transcript available at ${process.env.WEB_URL}/transcript/${channel.name}`, embeds: [embed] });
 
         interaction.followUp({ content: `Closing this ticket in 5 seconds...` });
 
